@@ -1,3 +1,0 @@
-enum UserState {
-    ACTIVE, LOCKED
-}
