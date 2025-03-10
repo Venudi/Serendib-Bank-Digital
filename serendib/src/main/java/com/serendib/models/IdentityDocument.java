@@ -1,9 +1,11 @@
 package com.serendib.models;
 
-class IdentityDocument {
+public class IdentityDocument {
     private IdType idType;
     private String idNumber;
 
+    public IdentityDocument() {}
+    
     public IdentityDocument(IdType idType, String idNumber) {
         if(!isValidId(idType, idNumber)) {
             throw new IllegalArgumentException("Invalid NIC or Passport number.");

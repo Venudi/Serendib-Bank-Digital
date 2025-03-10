@@ -1,27 +1,33 @@
 package com.serendib.services.authentication;
 
-import com.serendib.models.User;
-import com.serendib.utils.JsonUtil;
 import java.util.List;
+import java.util.Optional;
+
+import com.serendib.models.User;
+import com.serendib.repository.UserRepository;
+import com.serendib.utils.JsonReader;
 
 public class UserService {
-    private static final String FILE_PATH = "data/users.json";
+    private UserRepository userRepository;
 
-    public List<User> getAllUsers() {
-        return JsonUtil.readUsersFromFile(FILE_PATH);
+    public UserService() {
+        this.userRepository = new UserRepository();
     }
 
+    public static List<User> getAllUsers() {
+        return JsonReader.readUsers();
+    }
+    
     public User getUserByUsername(String username) {
-        return getAllUsers().stream()
-                .filter(user -> user.getUsername().equals(username))
-                .findFirst()
-                .orElse(null);
+        Optional<User> user = userRepository.getUserByUsername(username);
+        return user.orElse(null);  // Return null if not found
     }
 
-    public boolean saveUser(User user) {
-        List<User> users = getAllUsers();
-        users.add(user);
-        return JsonUtil.writeUsersToFile(FILE_PATH, users);
+    public boolean updateEmail(String username, String newEmail) {
+        User user = getUserByUsername(username);
+        if (user == null) {
+            return false;
+        }
+        return userRepository.saveUser(user);
     }
-
 }

@@ -1,5 +1,5 @@
 package com.serendib.models;
 
-enum UserState {
+public enum UserState {
     ACTIVE, LOCKED
 }

@@ -1,7 +1,8 @@
 package com.serendib.controllers;
 
-import com.serendib.services.authentication.AuthService;
 import java.util.Scanner;
+
+import com.serendib.services.authentication.AuthService;
 
 public class AuthController {
     private final AuthService authService;
@@ -25,16 +26,19 @@ public class AuthController {
         }
     }
 
-    public void logIn() {
+    public boolean logIn() {
         System.out.print("Enter username: ");
         String username = scanner.nextLine();
         System.out.print("Enter password: ");
         String password = scanner.nextLine();
 
+        // login attempts
         if (authService.logIn(username, password)) {
             System.out.println("Login successful! Welcome to the dashboard.");
+            return true;
         } else {
             System.out.println("Invalid credentials.");
+            return false;
         }
     }
 }

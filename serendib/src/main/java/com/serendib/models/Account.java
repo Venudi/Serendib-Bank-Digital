@@ -8,6 +8,10 @@ class Account {
     private String accountType; // CASA
     private List<String> facilities; // subscribed facilities
 
+    public Account() {
+        this.facilities = new ArrayList<>();
+    }
+    
     public Account(String accountNumber, String accountType) {
         this.accountNumber = accountNumber;
         this.accountType = accountType;

@@ -1,0 +1,51 @@
+[
+    {
+      "userId": "1",
+      "username": "user123",
+      "password": "$2a$10$7QOpN.0bEXAMPLEhjt5FKN5uoGJhpJ8ZG", 
+      "identityDocument": {
+        "idType": "NIC",
+        "idNumber": "987654321V"
+      },
+      "email": "user123@example.com",
+      "mobile": "0771234567",
+      "account": {
+        "accountNumber": "0011223344",
+        "accountType": "CASA",
+        "facilities": ["Online Banking", "Credit Card"]
+      }
+    },
+    {
+      "userId": "2",
+      "username": "john_doe",
+      "password": "$2a$10$9xEXAMPLEYltbbKqL6FNGprz89c0Zs6s6",
+      "identityDocument": {
+        "idType": "PASSPORT",
+        "idNumber": "A1234567"
+      },
+      "email": "john.doe@example.com",
+      "mobile": "0719876543",
+      "account": {
+        "accountNumber": "9876543210",
+        "accountType": "SAVINGS",
+        "facilities": ["Fixed Deposits", "Loan Services"]
+      }
+    },
+    {
+      "userId": "3",
+      "username": "alice_wonder",
+      "password": "$2a$10$EXAMPLE8XtV5C9bbZXo9kuOlD.e8l.Y",
+      "identityDocument": {
+        "idType": "NIC",
+        "idNumber": "200012345678"
+      },
+      "email": "alice.wonder@example.com",
+      "mobile": "0754567890",
+      "account": {
+        "accountNumber": "1234567890",
+        "accountType": "CASA",
+        "facilities": ["Online Banking", "E-Wallet"]
+      }
+    }
+  ]
+  
