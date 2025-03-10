@@ -30,17 +30,17 @@ public class AuthService {
     }
 
     // TODO: Allow only 3 login attempts
-    public boolean logIn(String username, String password) {
+    public User logIn(String username, String password) {
         Optional<User> matchingUser = userRepository.getUserByUsername(username);
         if(matchingUser.isEmpty()) {
             System.err.println("Please enter a valid username");
-            return false;
+            return null;
         } else {
             User user = matchingUser.get();
     
             if (user.isLocked()) {
                 System.err.println("Your account is locked. Please try again later.");
-                return false;
+                return null;
             }
     
             if (!user.getPassword().equals(password)) {
@@ -54,14 +54,12 @@ public class AuthService {
                 }
     
                 userRepository.saveUser(user);
-                return false;
+                return null;
             }
             
             System.out.println("Welcome " + user.getUsername());
             user.resetFailedLoginAttempts();
-            return true;
+            return user;
         }
-
     }
-
 }

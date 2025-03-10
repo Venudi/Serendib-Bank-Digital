@@ -23,7 +23,7 @@ public class LoginFacade {
      * @return true if authentication is successful; otherwise false.
      */
     public boolean authenticate(String username, String password, String otp) {
-        if (!authService.logIn(username, password)) {
+        if (authService.logIn(username, password) == null) {
             return false;
         }
 

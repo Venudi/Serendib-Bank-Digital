@@ -1,7 +1,10 @@
 package com.serendib;
 
+import java.util.Iterator;
 import java.util.Scanner;
 
+import com.serendib.models.Account;
+import com.serendib.models.User;
 import com.serendib.services.authentication.AuthService;
 
 public class Main {
@@ -12,21 +15,20 @@ public class Main {
         System.out.println("Press 3 to exit");
         Scanner scanner = new Scanner(System.in);
 
-        boolean loggedIn = false;
+        User loggedInUser = null;
 
         int choice = scanner.nextInt();
         switch (choice) {
             case 1:
-                while (!loggedIn) {
+                while (loggedInUser == null) {
                     System.out.print("Enter your username: ");
                     String username = scanner.next();
                     System.out.print("Enter your password: ");
                     String password = new String(System.console().readPassword());
                     AuthService authService = new AuthService();
-                    Boolean loginSuccessful = authService.logIn(username, password);
-                    if (loginSuccessful) {
+                    loggedInUser = authService.logIn(username, password);
+                    if (loggedInUser != null) {
                         System.out.println("Login successful!");
-                        loggedIn = true;
                     }
                 }
 
@@ -49,38 +51,32 @@ public class Main {
                 break;
         }
 
+        if(loggedInUser != null) {
+            // System.out.print("\033[H\033[2J");
+            // System.out.flush();
+            System.out.println("Welcome to Serendib Digital Dashboard!");
+            // System.out.println("Press 1 to view your subscribed facilities");
+            // System.out.println("Press 2 to subscribe to new facilities");
 
-        System.out.println("Welcome to Serendib Digital Dashboard!");
-        // userRepository.loadUsers();
+            Iterator<Account> accountIterator = loggedInUser.iterator();
 
-        
-        // ValidationService nicValidator = new NicValidator();
-        // ValidationService passportValidator = new PassportValidator();
-        // ValidationService otpValidator = new OtpValidator();
-        // AccountRepository accountRepository = new AccountRepository();
+            while (accountIterator.hasNext()) {
+                Account account = accountIterator.next();
+                System.out.println("Account: " + account.getAccountNumber() + " (" + account.getAccountType() + ")");
+            }
 
-        // OnboardingService onboardingService = new OnboardingService(nicValidator, passportValidator, otpValidator, accountRepository);
-
-        // // Valid request
-        // UserOnboardingRequest validRequest = new UserOnboardingRequest(IdType.NIC, "987654321V", "0011223344", "123456");
-        // onboardingService.onboardUser(validRequest);
-
-        // // Invalid OTP request
-        // UserOnboardingRequest invalidOtpRequest = new UserOnboardingRequest(IdType.NIC, "987654321V", "0011223344", "999999");
-
-        // onboardingService.onboardUser(invalidOtpRequest);
-
-        // // Invalid passport request
-        // UserOnboardingRequest invalidPassportRequest = new UserOnboardingRequest(IdType.PASSPORT, "1234567", "0011223344", "123456");
-        // onboardingService.onboardUser(invalidPassportRequest);
-
-        // // Valid passport request
-        // UserOnboardingRequest validPassportRequest = new UserOnboardingRequest(IdType.PASSPORT, "N1234567", "0011223344", "123456");
-        // onboardingService.onboardUser(validPassportRequest);
-
-        // // User login
-        // LoginFacade loginFacade = new LoginFacade();
-        // boolean isAuthenticated = loginFacade.authenticate("user123", "pass123", "123456");
-        // System.out.println("Authentication result: " + isAuthenticated);
+            // display facilities using iterator
+            // for each account in getAccounts
+            // for (int i = 0; i < loggedInUser.getAccounts().size(); i++) {
+            //     Account account = loggedInUser.getAccounts().get(i);
+            //     // print account details
+            //     System.out.println("Account Number: " + account.getAccountNumber());
+            //     System.out.println("Account Type: " + account.getAccountType());
+            //     System.out.println("Facilities: ");
+            //     account.iterator().forEachRemaining(facility -> System.out.println(facility));
+            //     System.out.println();
+            // }
+        }
+        // clear terminal
     }
 }

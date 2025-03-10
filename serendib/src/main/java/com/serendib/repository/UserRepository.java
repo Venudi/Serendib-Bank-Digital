@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.serendib.models.Account;
 import com.serendib.models.User;
 
 
@@ -28,8 +29,34 @@ public class UserRepository {
     private void loadUsers() {
         if (users.isEmpty()) {
             // hard coded users
-            users.add(new User("1", "admin", "admin", null, null, null, null));
-            users.add(new User("2", "user1", "user1", null, null, null, null));
+            User user = new User("1", "admin", "admin", null, null, null, null);
+            users.add(user);
+            
+            Account account = new Account("1", "CASA", users.get(0));
+            account.addFacility("ATM Withdrawal");
+            account.addFacility("Online Banking");
+            account.addFacility("Loan Services");
+            List<Account> accounts = new ArrayList<>();
+            accounts.add(account);
+            user.addAccount(account);
+
+            
+            user = new User("2", "user1", "user1", null, null, null, null);
+            users.add(user);
+            account = new Account("2", "Savings", users.get(1));
+            account.addFacility("ATM Withdrawal");
+            account.addFacility("Online Banking");
+            accounts = new ArrayList<>();
+            accounts.add(account);
+            user.addAccount(account);
+
+            account = new Account("3", "Current", users.get(1));
+            account.addFacility("ATM Withdrawal");
+            account.addFacility("Online Banking");
+            account.addFacility("Cheque Services");
+            accounts.add(account);
+            user.addAccount(account);
+            
             users.add(new User("3", "user2", "user2", null, null, null, null));
         }
     }
