@@ -19,11 +19,11 @@ public class AuthController {
         System.out.print("Enter password: ");
         String password = scanner.nextLine();
 
-        if (authService.signUp(username, password)) {
-            System.out.println("User registered successfully!");
-        } else {
-            System.out.println("Username already exists.");
-        }
+        // if (authService.signUp(username, password) != null) {
+        //     System.out.println("User registered successfully!");
+        // } else {
+        //     System.out.println("Username already exists.");
+        // }
     }
 
     public boolean logIn() {

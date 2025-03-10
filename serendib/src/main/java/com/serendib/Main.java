@@ -4,6 +4,8 @@ import java.util.Iterator;
 import java.util.Scanner;
 
 import com.serendib.models.Account;
+import com.serendib.models.IdType;
+import com.serendib.models.IdentityDocument;
 import com.serendib.models.User;
 import com.serendib.services.authentication.AuthService;
 
@@ -39,9 +41,30 @@ public class Main {
                 System.out.print("Enter your password: ");
                 // hide password as the user types
                 String newPassword = new String(System.console().readPassword());
+                // enter 1 to enter NIC, 2 for passport
+                System.out.print("Enter 1 for NIC, 2 for passport: ");
+                int idType = scanner.nextInt();
+                while (idType != 1 && idType != 2) {
+                    System.out.print("Invalid choice. Enter 1 for NIC, 2 for passport: ");
+                    idType = scanner.nextInt();
+                }
+                
+                IdentityDocument id = null;
+                switch(idType){
+                    case 1: // NIC
+                        System.out.print("Enter your NIC: ");
+                        String idInput = scanner.next();
+                        id = new IdentityDocument(IdType.NIC, idInput);
+                        break;
+                    case 2: // passport
+                        System.out.print("Enter your passport: ");
+                        String passport = scanner.next();
+                        id = new IdentityDocument(IdType.PASSPORT, passport);
+                        break;
+                }
 
-                // AuthService authService = new AuthService();
-                // authService.signUp(newUsername, newPassword);
+                AuthService authService = new AuthService();
+                loggedInUser = authService.signUp(newUsername, newPassword, id.getIdNumber(), id.getIdType(), "123456");
                 break;
             case 3:
                 System.out.println("Goodbye!");
@@ -52,31 +75,25 @@ public class Main {
         }
 
         if(loggedInUser != null) {
-            // System.out.print("\033[H\033[2J");
-            // System.out.flush();
-            System.out.println("Welcome to Serendib Digital Dashboard!");
-            // System.out.println("Press 1 to view your subscribed facilities");
-            // System.out.println("Press 2 to subscribe to new facilities");
-
+            System.out.println("Welcome " + loggedInUser.getUsername() + " to Serendib Digital Dashboard!");
+            
             Iterator<Account> accountIterator = loggedInUser.iterator();
 
-            while (accountIterator.hasNext()) {
-                Account account = accountIterator.next();
-                System.out.println("Account: " + account.getAccountNumber() + " (" + account.getAccountType() + ")");
+            System.out.println();
+            // if user has accounts
+            if (!accountIterator.hasNext()) {
+                System.out.println("You have no accounts.");
+            } else {
+                while (accountIterator.hasNext()) {
+                    Account account = accountIterator.next();
+                    System.out.println("Account: " + account.getAccountNumber() + " (" + account.getAccountType() + ")");
+                    // facility iterator
+                    Iterator<String> facilityIterator = account.iterator();
+                    while (facilityIterator.hasNext()) {
+                        System.out.println("\t- " + facilityIterator.next());
+                    }
+                }
             }
-
-            // display facilities using iterator
-            // for each account in getAccounts
-            // for (int i = 0; i < loggedInUser.getAccounts().size(); i++) {
-            //     Account account = loggedInUser.getAccounts().get(i);
-            //     // print account details
-            //     System.out.println("Account Number: " + account.getAccountNumber());
-            //     System.out.println("Account Type: " + account.getAccountType());
-            //     System.out.println("Facilities: ");
-            //     account.iterator().forEachRemaining(facility -> System.out.println(facility));
-            //     System.out.println();
-            // }
         }
-        // clear terminal
     }
 }

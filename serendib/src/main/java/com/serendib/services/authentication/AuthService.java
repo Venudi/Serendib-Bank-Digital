@@ -2,8 +2,14 @@ package com.serendib.services.authentication;
 
 import java.util.Optional;
 
+import com.serendib.models.IdType;
 import com.serendib.models.User;
 import com.serendib.repository.UserRepository;
+import com.serendib.services.validation.IdentityValidator;
+import com.serendib.services.validation.OtpValidator;
+import com.serendib.services.validation.PasswordValidator;
+import com.serendib.services.validation.UsernameValidator;
+import com.serendib.services.validation.ValidationHandler;
 
 
 public class AuthService {
@@ -18,18 +24,33 @@ public class AuthService {
         // this.userService = new UserService();
     }
 
-    public boolean signUp(String username, String password) {
-        
-        if (userRepository.getUserByUsername(username) != null) {
-            return false;
-        }
-        // TODO
-        User newUser = new User(username, username, password, null, null, null, null);
+    public User signUp(String username, String password, String idNumber, IdType idType, String otp) {
+        // validation chain
+        ValidationHandler usernameValidator = new UsernameValidator();
+        ValidationHandler passwordValidator = new PasswordValidator();
+        ValidationHandler identityValidator = new IdentityValidator(idType);
+        ValidationHandler otpValidator = new OtpValidator();
 
-        return userRepository.saveUser(newUser);
+        // set up the chain
+        usernameValidator.setNext(passwordValidator)
+                         .setNext(identityValidator)
+                         .setNext(otpValidator);
+
+        // run validation
+        if (!usernameValidator.handle(username, password, idNumber, idType, otp) ||
+        !passwordValidator.handle(username, password, idNumber, idType, otp) ||
+        !identityValidator.handle(username, password, idNumber, idType, otp) ||
+        !otpValidator.handle(username, password, idNumber, idType, otp)) {
+            return null; // Validation failed
+        }
+
+        // validation passed
+        User newUser = new User(username, username, password, null, null, null, null);
+        userRepository.saveUser(newUser);
+
+        return newUser;
     }
 
-    // TODO: Allow only 3 login attempts
     public User logIn(String username, String password) {
         Optional<User> matchingUser = userRepository.getUserByUsername(username);
         if(matchingUser.isEmpty()) {

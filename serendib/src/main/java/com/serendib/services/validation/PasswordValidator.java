@@ -1,12 +1,14 @@
 package com.serendib.services.validation;
 
-public class PasswordValidator implements ValidationService {
+import com.serendib.models.IdType;
+
+public class PasswordValidator extends ValidationHandler {
     @Override
-    public boolean validate(String password) {
-        // At least 8 characters and at most 15 characters
-        // At least one number, special character, uppercase letter and lowercase letter
-        // None of the following special characters ' ( ) * , . / : \ _ ~ - or spaces
-        return password.length() >= 8 && password.length() <= 15 && password.matches(".*[A-Z].*") && password.matches(".*[a-z].*") && password.matches(".*[0-9].*") &&
-        password.matches(".*[!#$@%^&+=].*") && !password.matches(".*[ '()*,./:\\_~-].*");
+    public boolean handle(String username, String password, String idNumber, IdType idType, String otp) {
+        if (password.length() < 8 || password.length() > 15 || !password.matches(".*[A-Z].*") || !password.matches(".*[0-9].*")) {
+            System.err.println("Password must be between 8 and 15 characters, contain at least one uppercase letter, and contain at least one digit.");
+            return false;
+        }
+        return super.handle(username, password, idNumber, idType, otp);
     }
 }
