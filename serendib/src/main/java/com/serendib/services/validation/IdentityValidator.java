@@ -14,8 +14,12 @@ public class IdentityValidator extends ValidationHandler {
         boolean isValid = (idType == IdType.NIC && idNumber.matches("\\d{9}[Vv]?|\\d{12}")) ||
                           (idType == IdType.PASSPORT && idNumber.matches("[A-Z]{1}[0-9]{7}"));
 
-        if (!isValid) {
-            System.err.println("Invalid NIC or Passport number.");
+        if (!isValid && idType == IdType.NIC) {
+            System.err.println("Invalid NIC number.");
+            return false;
+        }
+        if (!isValid && idType == IdType.PASSPORT) {
+            System.err.println("Invalid passport number.");
             return false;
         }
         return super.handle(username, password, idNumber, idType, otp);

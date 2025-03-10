@@ -1,5 +1,8 @@
 package com.serendib.services.authentication;
 
+import java.util.Scanner;
+
+import com.serendib.models.User;
 import com.serendib.services.otp.OTPService;
 
 public class LoginFacade {
@@ -22,18 +25,28 @@ public class LoginFacade {
      * @param otp The one-time password for 2FA.
      * @return true if authentication is successful; otherwise false.
      */
-    public boolean authenticate(String username, String password, String otp) {
-        if (authService.logIn(username, password) == null) {
-            return false;
+    public User authenticate(String username, String password) {
+        User user = authService.logIn(username, password);
+        if (user == null) {
+            return null;
         }
 
-        // validate OTP
-        if (!otpService.validateOTP(otp, otpService.generateOTP(username))) {
-            return false;
+        String storedOtp = otpService.generateOTP(username);
+        System.out.println("storedOtp - " + storedOtp);
+
+        // read otp from user input
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter OTP: ");
+        String otp = scanner.nextLine();
+        scanner.close();
+
+        if (storedOtp == null || !otpService.validateOTP(otp, storedOtp)) {
+            System.err.println("Invalid OTP.");
+            return null;
         }
 
         // TODO: create secure session
         System.out.println("User authenticated successfully.");
-        return true;
+        return user;
     }
 }

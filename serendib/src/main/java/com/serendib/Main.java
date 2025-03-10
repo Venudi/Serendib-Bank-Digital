@@ -8,6 +8,7 @@ import com.serendib.models.IdType;
 import com.serendib.models.IdentityDocument;
 import com.serendib.models.User;
 import com.serendib.services.authentication.AuthService;
+import com.serendib.services.authentication.LoginFacade;
 
 public class Main {
     public static void main(String[] args) {
@@ -21,21 +22,21 @@ public class Main {
 
         int choice = scanner.nextInt();
         switch (choice) {
-            case 1:
+            case 1 -> {
                 while (loggedInUser == null) {
                     System.out.print("Enter your username: ");
                     String username = scanner.next();
                     System.out.print("Enter your password: ");
                     String password = new String(System.console().readPassword());
-                    AuthService authService = new AuthService();
-                    loggedInUser = authService.logIn(username, password);
+
+                    LoginFacade loginFacade = new LoginFacade();
+                    loggedInUser = loginFacade.authenticate(username, password);
                     if (loggedInUser != null) {
                         System.out.println("Login successful!");
                     }
                 }
-
-                break;
-            case 2:
+            }
+            case 2 -> {
                 System.out.print("Enter your username: ");
                 String newUsername = scanner.next();
                 System.out.print("Enter your password: ");
@@ -51,28 +52,29 @@ public class Main {
                 
                 IdentityDocument id = null;
                 switch(idType){
-                    case 1: // NIC
+                    case 1 -> {
+                        // NIC
                         System.out.print("Enter your NIC: ");
                         String idInput = scanner.next();
                         id = new IdentityDocument(IdType.NIC, idInput);
-                        break;
-                    case 2: // passport
+                }
+                    case 2 -> {
+                        // passport
                         System.out.print("Enter your passport: ");
                         String passport = scanner.next();
                         id = new IdentityDocument(IdType.PASSPORT, passport);
-                        break;
+                }
                 }
 
                 AuthService authService = new AuthService();
                 loggedInUser = authService.signUp(newUsername, newPassword, id.getIdNumber(), id.getIdType(), "123456");
-                break;
-            case 3:
-                System.out.println("Goodbye!");
-                break;
-            default:
-                System.out.println("Invalid choice");
-                break;
+            }
+            case 3 -> System.out.println("Goodbye!");
+            default -> System.out.println("Invalid choice");
+
         }
+        
+        scanner.close();
 
         if(loggedInUser != null) {
             System.out.println("Welcome " + loggedInUser.getUsername() + " to Serendib Digital Dashboard!");
