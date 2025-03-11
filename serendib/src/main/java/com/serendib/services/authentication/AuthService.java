@@ -10,14 +10,14 @@ import com.serendib.services.validation.OtpValidator;
 import com.serendib.services.validation.PasswordValidator;
 import com.serendib.services.validation.UsernameValidator;
 import com.serendib.services.validation.ValidationHandler;
+import com.serendib.utils.Config;
 
 
 public class AuthService {
     // have hard coded user
 
-    // private UserRepository userRepository;
     private UserRepository userRepository = UserRepository.getInstance();
-    private static final int MAX_FAILED_LOGIN_ATTEMPTS = 3;
+    private static final int MAX_FAILED_LOGIN_ATTEMPTS = Config.getInt("max_login_attempts");
 
     public AuthService() {
         // this.userRepository = userRepository;
@@ -34,7 +34,9 @@ public class AuthService {
         // set up the chain
         usernameValidator.setNext(passwordValidator)
                          .setNext(identityValidator)
-                         .setNext(otpValidator);
+                         .setNext(otpValidator)
+                         .setNext(otpValidator)
+                         ;
 
         // run validation
         if (!usernameValidator.handle(username, password, idNumber, idType, otp) ||
@@ -44,6 +46,17 @@ public class AuthService {
             return null; // Validation failed
         }
 
+        // accept terms and conditions 
+        // display terms and conditions link
+        System.out.println("Terms and conditions: " + Config.get("terms_conditions_url"));
+
+        System.out.println("Do you accept the terms and conditions? (y/n)");
+        String response = System.console().readLine();
+        if (!response.equals("y")) {
+            System.err.println("You must accept the terms and conditions to proceed.");
+            return null;
+        }
+
         // validation passed
         User newUser = new User(username, username, password, null, null, null, null);
         userRepository.saveUser(newUser);
@@ -51,7 +64,7 @@ public class AuthService {
         return newUser;
     }
 
-    public User logIn(String username, String password) {
+    public User validateUsernamePassword(String username, String password) {
         Optional<User> matchingUser = userRepository.getUserByUsername(username);
         if(matchingUser.isEmpty()) {
             System.err.println("Please enter a valid username");
@@ -78,7 +91,6 @@ public class AuthService {
                 return null;
             }
             
-            System.out.println("Welcome " + user.getUsername());
             user.resetFailedLoginAttempts();
             return user;
         }

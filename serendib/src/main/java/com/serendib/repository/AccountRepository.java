@@ -7,8 +7,7 @@ import com.serendib.models.Account;
 
 public class AccountRepository {
     private static AccountRepository instance;  // Singleton instance
-    private Map<String, Account> accountMap; 
-    //  private Set<String> accounts; // Stores valid account numbers
+    private Map<String, Account> accountMap;
 
     public AccountRepository() {
         accountMap = new HashMap<>();

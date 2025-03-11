@@ -12,14 +12,37 @@ import com.serendib.services.authentication.LoginFacade;
 
 public class Main {
     public static void main(String[] args) {
+        User loggedInUser = null;
+        
+        while(true){
+            loggedInUser = loginRegisterOrExit();
+
+            if(loggedInUser != null) {
+                // print dashed line
+                System.out.println("--------------------------------------------------");
+                System.out.println("Welcome " + loggedInUser.getUsername() + " to Serendib Digital Dashboard!");
+                System.out.println("--------------------------------------------------");
+
+                displayUserAccounts(loggedInUser);
+
+                break;
+            }
+        }
+    }
+
+    public static void displayMainMenu() {
         System.out.println("Welcome to Serendib Digital!");
         System.out.println("Press 1 to log in");
         System.out.println("Press 2 to sign up");
         System.out.println("Press 3 to exit");
+    }
+
+    public static User loginRegisterOrExit() {
+        displayMainMenu();
+
         Scanner scanner = new Scanner(System.in);
 
         User loggedInUser = null;
-
         int choice = scanner.nextInt();
         switch (choice) {
             case 1 -> {
@@ -33,6 +56,9 @@ public class Main {
                     loggedInUser = loginFacade.authenticate(username, password);
                     if (loggedInUser != null) {
                         System.out.println("Login successful!");
+                    }
+                    if (loggedInUser == null) {
+                        System.out.println("Login failed. Please try again.");
                     }
                 }
             }
@@ -65,37 +91,40 @@ public class Main {
                         id = new IdentityDocument(IdType.PASSPORT, passport);
                 }
                 }
-
                 AuthService authService = new AuthService();
                 loggedInUser = authService.signUp(newUsername, newPassword, id.getIdNumber(), id.getIdType(), "123456");
             }
-            case 3 -> System.out.println("Goodbye!");
+            case 3 -> {
+                System.out.println("Goodbye!");
+                System.exit(0);
+            }
             default -> System.out.println("Invalid choice");
-
         }
-        
         scanner.close();
+        return loggedInUser;
+    }
 
-        if(loggedInUser != null) {
-            System.out.println("Welcome " + loggedInUser.getUsername() + " to Serendib Digital Dashboard!");
-            
-            Iterator<Account> accountIterator = loggedInUser.iterator();
+    // display user accounts
+    public static void displayUserAccounts(User user) {
+        System.out.println("YOUR ACCOUNTS");
+        Iterator<Account> accountIterator = user.iterator();
 
-            System.out.println();
-            // if user has accounts
-            if (!accountIterator.hasNext()) {
-                System.out.println("You have no accounts.");
-            } else {
-                while (accountIterator.hasNext()) {
-                    Account account = accountIterator.next();
-                    System.out.println("Account: " + account.getAccountNumber() + " (" + account.getAccountType() + ")");
-                    // facility iterator
-                    Iterator<String> facilityIterator = account.iterator();
-                    while (facilityIterator.hasNext()) {
-                        System.out.println("\t- " + facilityIterator.next());
-                    }
+
+        // if user has accounts
+        if (!accountIterator.hasNext()) {
+            System.out.println("You have no accounts.");
+        } else {
+            while (accountIterator.hasNext()) {
+                Account account = accountIterator.next();
+                System.out.println("Account: " + account.getAccountNumber() + " (" + account.getAccountType() + ")");
+                System.out.println("\t- Balance (LKR): " + String.format("%.2f", account.getBalance()));
+                // facility iterator
+                Iterator<String> facilityIterator = account.iterator();
+                while (facilityIterator.hasNext()) {
+                    System.out.println("\t- " + facilityIterator.next());
                 }
             }
         }
     }
+
 }

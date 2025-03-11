@@ -32,7 +32,7 @@ public class UserRepository {
             User user = new User("1", "admin", "admin", null, null, null, null);
             users.add(user);
             
-            Account account = new Account("0011223344", "CASA", users.get(0));
+            Account account = new Account("0011223344", "CASA", 100000, users.get(0));
             account.addFacility("ATM Withdrawal");
             account.addFacility("Online Banking");
             account.addFacility("Loan Services");
@@ -43,14 +43,14 @@ public class UserRepository {
             
             user = new User("2", "user1", "user1", null, null, null, null);
             users.add(user);
-            account = new Account("9876543210", "Savings", users.get(1));
+            account = new Account("9876543210", "Savings",200000 , users.get(1));
             account.addFacility("ATM Withdrawal");
             account.addFacility("Online Banking");
             accounts = new ArrayList<>();
             accounts.add(account);
             user.addAccount(account);
 
-            account = new Account("1234567890", "Current", users.get(1));
+            account = new Account("1234567890", "Current", 25000000, users.get(1));
             account.addFacility("ATM Withdrawal");
             account.addFacility("Online Banking");
             account.addFacility("Cheque Services");

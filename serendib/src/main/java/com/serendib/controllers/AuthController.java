@@ -33,7 +33,7 @@ public class AuthController {
         String password = scanner.nextLine();
 
         // login attempts
-        if (authService.logIn(username, password) != null) {
+        if (authService.validateUsernamePassword(username, password) != null) {
             System.out.println("Login successful! Welcome to the dashboard.");
             return true;
         } else {

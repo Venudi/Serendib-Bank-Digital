@@ -9,7 +9,6 @@ public class LoginFacade {
     private AuthService authService;
     private OTPService otpService;
 
-    private int loginAttempts = 0;
     // TODO: Session
     // private SessionService sessionService;
 
@@ -26,7 +25,7 @@ public class LoginFacade {
      * @return true if authentication is successful; otherwise false.
      */
     public User authenticate(String username, String password) {
-        User user = authService.logIn(username, password);
+        User user = authService.validateUsernamePassword(username, password);
         if (user == null) {
             return null;
         }
@@ -36,17 +35,41 @@ public class LoginFacade {
 
         // read otp from user input
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter OTP: ");
-        String otp = scanner.nextLine();
-        scanner.close();
 
-        if (storedOtp == null || !otpService.validateOTP(otp, storedOtp)) {
-            System.err.println("Invalid OTP.");
+        System.out.println("Press 1 to enter OTP\nPress 2 to request new OTP");
+        int choice = scanner.nextInt();
+        scanner.nextLine(); // consume newline
+
+        if (choice == 2) {
+            storedOtp = otpService.generateOTP(username);
+            System.out.println("New OTP generated - " + storedOtp);
+        }
+        if (storedOtp == null) {
+            System.err.println("Failed to generate OTP.");
             return null;
         }
 
-        // TODO: create secure session
+        
+        // allow three attempts to enter OTP
+        for (int i = 0; i < 3; i++) {
+            System.out.print("Enter OTP: ");
+            String otp = scanner.nextLine();
+
+            if (otp.equals(storedOtp)) {
+                System.out.println("OTP verified!");
+                break;
+            }
+            
+            if (i == 2) {
+                System.err.println("Maximum attempts reached. Please try again later.");
+                user.lockAccount();
+                return null;
+            }
+        }
+        
         System.out.println("User authenticated successfully.");
+        scanner.close();
+
         return user;
     }
 }

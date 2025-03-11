@@ -6,19 +6,21 @@ import java.util.List;
 
 public class Account {
     private String accountNumber;
-    private String accountType; // CASA
-    private List<String> facilities; // subscribed facilities
+    private String accountType;
+    private List<String> facilities;
     private User user;
+    private double balance;
 
     public Account() {
         
         this.facilities = new ArrayList<>();
     }
     
-    public Account(String accountNumber, String accountType, User user) {
+    public Account(String accountNumber, String accountType, double balance, User user) {
         this.accountNumber = accountNumber;
         this.accountType = accountType;
         this.facilities = new ArrayList<>();
+        this.balance = balance;
         this.user = user;
     }
     
@@ -27,6 +29,9 @@ public class Account {
 
     public User getUser() { return user; }
     public void setUser(User user) { this.user = user; }
+
+    public double getBalance() { return balance; }
+    public void setBalance(double balance) { this.balance = balance; }
 
     public List<String> getFacilities() { return facilities; }
     public void setFacilities(List<String> facilities) { this.facilities = facilities; }

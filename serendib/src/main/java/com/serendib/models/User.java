@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import com.serendib.utils.Config;
+
 public class User {
     private String userId;
     private String username;
@@ -20,9 +22,8 @@ public class User {
     private int failedLoginAttempts;
     private LocalDateTime lockTime;
 
-    // public final int MAX_FAILED_LOGIN_ATTEMPTS = 3;
     // private static final int LOCK_DURATION_MINUTES = 1;
-    private static final int LOCK_DURATION_SECONDS = 15;
+    private static final int LOCK_DURATION_SECONDS = Config.getInt("timeout_duration_s");
 
     public User() {
         this.state = UserState.ACTIVE;
