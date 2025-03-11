@@ -12,7 +12,7 @@ import com.serendib.services.authentication.LoginFacade;
 
 public class Main {
     public static void main(String[] args) {
-        User loggedInUser = null;
+        User loggedInUser;
         
         while(true){
             loggedInUser = loginRegisterOrExit();

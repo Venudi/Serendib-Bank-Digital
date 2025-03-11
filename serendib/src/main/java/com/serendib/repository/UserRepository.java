@@ -50,7 +50,7 @@ public class UserRepository {
             accounts.add(account);
             user.addAccount(account);
 
-            account = new Account("1234567890", "Current", 25000000, users.get(1));
+            account = new Account("1234567890", "Current", 250000000, users.get(1));
             account.addFacility("ATM Withdrawal");
             account.addFacility("Online Banking");
             account.addFacility("Cheque Services");
