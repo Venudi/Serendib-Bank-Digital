@@ -10,7 +10,7 @@ public class IdentityValidator extends ValidationHandler {
     }
 
     @Override
-    public boolean handle(String username, String password, String idNumber, IdType idType, String otp) {
+    public boolean handle(String username, String password, String idNumber, IdType idType) {
         boolean isValid = (idType == IdType.NIC && idNumber.matches("\\d{9}[Vv]?|\\d{12}")) ||
                           (idType == IdType.PASSPORT && idNumber.matches("[A-Z]{1}[0-9]{7}"));
 
@@ -22,6 +22,6 @@ public class IdentityValidator extends ValidationHandler {
             System.err.println("Invalid passport number.");
             return false;
         }
-        return super.handle(username, password, idNumber, idType, otp);
+        return super.handle(username, password, idNumber, idType);
     }
 }

@@ -4,7 +4,7 @@ public class MobileOTPHandler extends OTPHandler {
     @Override
     public void sendOTP(String otp, String mobile, String email) {
         if (mobile != null && !mobile.isEmpty()) {
-            System.out.println("OTP sent to mobile: " + mobile);
+            System.out.println("OTP sent to mobile: " + mobile + " (" + otp + ")");
         } 
         
         if (nextHandler != null) {

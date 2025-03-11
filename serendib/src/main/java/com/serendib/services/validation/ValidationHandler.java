@@ -10,9 +10,9 @@ public abstract class ValidationHandler {
         return nextHandler; // Allows chaining
     }
 
-    public boolean handle(String username, String password, String idNumber, IdType idType, String otp) {
+    public boolean handle(String username, String password, String idNumber, IdType idType) {
         if (nextHandler != null) {
-            return nextHandler.handle(username, password, idNumber, idType, otp);
+            return nextHandler.handle(username, password, idNumber, idType);
         }
         return true; // If no handler fails, validation passes
     }

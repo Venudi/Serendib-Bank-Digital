@@ -17,7 +17,7 @@ public class User {
     private String email;
     private String mobile;
     // account list
-    private List<Account> accounts;
+    private List<Account> accounts = new ArrayList<>();
     private UserState state; // ACTIVE, LOCKED
     private int failedLoginAttempts;
     private LocalDateTime lockTime;
@@ -81,7 +81,7 @@ public class User {
         private int currentIndex = 0;
 
         public AccountIterator(List<Account> accounts) {
-            this.accounts = accounts;
+            this.accounts = accounts != null ? accounts : new ArrayList<>(); 
         }
 
         @Override

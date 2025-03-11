@@ -14,19 +14,18 @@ public class Main {
     public static void main(String[] args) {
         User loggedInUser;
         
-        while(true){
-            loggedInUser = loginRegisterOrExit();
+        loggedInUser = loginRegisterOrExit();
 
-            if(loggedInUser != null) {
-                // print dashed line
-                System.out.println("--------------------------------------------------");
-                System.out.println("Welcome " + loggedInUser.getUsername() + " to Serendib Digital Dashboard!");
-                System.out.println("--------------------------------------------------");
+        clearScreen();
 
-                displayUserAccounts(loggedInUser);
+        if(loggedInUser != null) {
+            // print dashed line
+            System.out.println("--------------------------------------------------");
+            System.out.println("Welcome " + loggedInUser.getUsername() + " to Serendib Digital Dashboard!");
+            System.out.println("--------------------------------------------------");
 
-                break;
-            }
+            displayUserAccounts(loggedInUser);
+
         }
     }
 
@@ -54,9 +53,6 @@ public class Main {
 
                     LoginFacade loginFacade = new LoginFacade();
                     loggedInUser = loginFacade.authenticate(username, password);
-                    if (loggedInUser != null) {
-                        System.out.println("Login successful!");
-                    }
                     if (loggedInUser == null) {
                         System.out.println("Login failed. Please try again.");
                     }
@@ -92,7 +88,7 @@ public class Main {
                 }
                 }
                 AuthService authService = new AuthService();
-                loggedInUser = authService.signUp(newUsername, newPassword, id.getIdNumber(), id.getIdType(), "123456");
+                loggedInUser = authService.signUp(newUsername, newPassword, id.getIdNumber(), id.getIdType());
             }
             case 3 -> {
                 System.out.println("Goodbye!");
@@ -125,6 +121,11 @@ public class Main {
                 }
             }
         }
+    }
+
+    public static void clearScreen() {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
     }
 
 }

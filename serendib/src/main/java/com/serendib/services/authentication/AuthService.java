@@ -20,11 +20,9 @@ public class AuthService {
     private static final int MAX_FAILED_LOGIN_ATTEMPTS = Config.getInt("max_login_attempts");
 
     public AuthService() {
-        // this.userRepository = userRepository;
-        // this.userService = new UserService();
     }
 
-    public User signUp(String username, String password, String idNumber, IdType idType, String otp) {
+    public User signUp(String username, String password, String idNumber, IdType idType) {
         // validation chain
         ValidationHandler usernameValidator = new UsernameValidator();
         ValidationHandler passwordValidator = new PasswordValidator();
@@ -34,15 +32,10 @@ public class AuthService {
         // set up the chain
         usernameValidator.setNext(passwordValidator)
                          .setNext(identityValidator)
-                         .setNext(otpValidator)
-                         .setNext(otpValidator)
-                         ;
+                         .setNext(otpValidator);
 
         // run validation
-        if (!usernameValidator.handle(username, password, idNumber, idType, otp) ||
-        !passwordValidator.handle(username, password, idNumber, idType, otp) ||
-        !identityValidator.handle(username, password, idNumber, idType, otp) ||
-        !otpValidator.handle(username, password, idNumber, idType, otp)) {
+        if (!usernameValidator.handle(username, password, idNumber, idType)) {
             return null; // Validation failed
         }
 
@@ -90,7 +83,7 @@ public class AuthService {
                 userRepository.saveUser(user);
                 return null;
             }
-            
+
             user.resetFailedLoginAttempts();
             return user;
         }

@@ -7,11 +7,11 @@ public class UsernameValidator extends ValidationHandler {
     private UserRepository userRepository = UserRepository.getInstance();
 
     @Override
-    public boolean handle(String username, String password, String idNumber, IdType idType, String otp) {
+    public boolean handle(String username, String password, String idNumber, IdType idType) {
         if (userRepository.getUserByUsername(username).isPresent()) {
             System.err.println("Username already exists.");
             return false;
         }
-        return super.handle(username, password, idNumber, idType, otp);
+        return super.handle(username, password, idNumber, idType);
     }
 }

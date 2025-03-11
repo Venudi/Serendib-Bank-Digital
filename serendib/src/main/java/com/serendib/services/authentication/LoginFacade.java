@@ -30,8 +30,7 @@ public class LoginFacade {
             return null;
         }
 
-        String storedOtp = otpService.generateOTP(username);
-        System.out.println("storedOtp - " + storedOtp);
+        String storedOtp = otpService.sendOTP(username, "0771234567", "username@email.com");
 
         // read otp from user input
         Scanner scanner = new Scanner(System.in);
@@ -41,8 +40,7 @@ public class LoginFacade {
         scanner.nextLine(); // consume newline
 
         if (choice == 2) {
-            storedOtp = otpService.generateOTP(username);
-            System.out.println("New OTP generated - " + storedOtp);
+            storedOtp = otpService.sendOTP(username, "0771234567", "username@email.com");
         }
         if (storedOtp == null) {
             System.err.println("Failed to generate OTP.");
